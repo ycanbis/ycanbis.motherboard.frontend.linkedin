@@ -34,9 +34,9 @@ const oauth = {
   }
 }
 
-Auth.configure({
-  oauth: oauth
-});
+// Auth.configure({
+  // oauth: oauth
+// });
 
 if (environment.production) {
   enableProdMode();
