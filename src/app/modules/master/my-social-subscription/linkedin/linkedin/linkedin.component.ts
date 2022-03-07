@@ -9,8 +9,8 @@ import { SocialNames } from 'src/app/helper/enum/social-names/social-names';
 import { AwsCognitoAuthenticatedUserService } from 'src/app/helper/services/AwsCognitoAuthenticatedUser/aws-cognito-authenticated-user.service';
 import * as _ from "lodash";
 import { SocialLinkdedinService } from 'src/app/helper/http/social-linkedin/social-linkdedin.service';
-
-
+import { environment } from 'src/environments/environment'
+import axios from 'axios';
 @Component({
   selector: 'app-linkedin',
   templateUrl: './linkedin.component.html',
@@ -35,6 +35,8 @@ export class LinkedinComponent implements OnInit {
   faComment = faComment;
 
   isTwitterCollapsed = false;
+  posts: any = []
+  user: any = {}
 
   public socialNames = SocialNames;
   customizeModalRef: BsModalRef | undefined;
@@ -60,16 +62,48 @@ export class LinkedinComponent implements OnInit {
       } else {
         this.social_name = this.socialNames.linkedin;
       }
-      this.initTwitterSubForm();
-      this.initAddGroupSubForm();
-      this.getSocialFeed({});
-      this.getMySubscriptionList();
+      // this.initTwitterSubForm();
+      // this.initAddGroupSubForm();
+      // this.getSocialFeed({});
+      // this.getMySubscriptionList();
+
     });
+
+    let token = localStorage.getItem("token")
+    if (token) {
+      this.user = localStorage.getItem("User")
+      this.user = JSON.parse(this.user)
+      axios.get(`${environment.backend_url}getOrganization?accessToken=${token}`).then((res) => {
+        if (res.data) {
+          localStorage.setItem("organization", JSON.stringify(res.data))
+          let urn = res.data.organization
+          axios.get(`${environment.backend_url}getAllposts?accessToken=${token}&urn=${urn}`)
+            .then((res) => {
+              this.posts = res.data
+            }).catch((err) => {
+              alert("Something Went wrong please try again")
+
+            });
+        }
+        else {
+          alert("No organization found with linked account")
+        }
+
+
+      }).catch(() => {
+        alert("Something Went wrong please try again")
+      })
+    }
   }
 
   /**
    * Fetching social data
    */
+
+  public loginLinkedIn() {
+    location.href = `https://www.linkedin.com/oauth/v2/authorization?response_type=code&state=true&client_id=${environment.LINKEDIN_API_KEY}&redirect_uri=${environment.LINKEDIN_REDIRECT_URL}&scope=r_basicprofile%20rw_organization_admin%20w_organization_social%20w_member_social%20r_organization_social%20r_emailaddress`
+  }
+
 
   linkedinData: any = [];
   pageSize = 10;

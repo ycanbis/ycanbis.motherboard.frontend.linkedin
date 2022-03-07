@@ -3,7 +3,9 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { faUserLock, faUserPlus, faEnvelope, faSignInAlt } from '@fortawesome/free-solid-svg-icons';
+import { Console } from 'console';
 import { LoginService } from 'src/app/helper/login/login.service';
+import { environment } from "src/environments/environment"
 
 @Component({
   selector: 'app-login',
@@ -12,7 +14,7 @@ import { LoginService } from 'src/app/helper/login/login.service';
 })
 export class LoginComponent implements OnInit {
   faUserLock = faUserLock;
-  faUserPlus =faUserPlus;
+  faUserPlus = faUserPlus;
   faEnvelope = faEnvelope;
   faSignInAlt = faSignInAlt;
 

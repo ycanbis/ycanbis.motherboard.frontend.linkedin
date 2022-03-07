@@ -3,7 +3,9 @@ import { Title } from '@angular/platform-browser';
 import { faTachometerAlt, faShapes, faBuilding, faCircle, faSave, faTimes, faTh, faChartLine } from '@fortawesome/free-solid-svg-icons';
 import { SocialNames } from 'src/app/helper/enum/social-names/social-names';
 import { MyAccountService } from 'src/app/helper/http/my-account/my-account.service';
-
+import axios from 'axios';
+import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-social-categories',
   templateUrl: './social-categories.component.html',
@@ -24,7 +26,7 @@ export class SocialCategoriesComponent implements OnInit {
 
   public socialNames = SocialNames;
 
-  constructor(private titleService: Title, private myAccountService: MyAccountService) { }
+  constructor(private titleService: Title, private myAccountService: MyAccountService, private _router: Router) { }
 
   ngOnInit(): void {
     this.titleService.setTitle("Social");
